@@ -3,17 +3,24 @@ import { GifsService } from '../../../gifs.service';
 
 @Component({
   selector: 'gifs-search-box',
-  templateUrl: './search-box.component.html',
-  styleUrl: './search-box.component.css'
+  template: `
+    <h5>Buscar:</h5>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Buscar gifs..."
+      (keyup.enter)="searchTag()"
+      #txtTagInput
+    />
+  `,
 })
 export class SearchBoxComponent {
-
   @ViewChild('txtTagInput')
   tagInput!: ElementRef<HTMLInputElement>;
-  constructor(private gifsService: GifsService) { }
+  constructor(private gifsService: GifsService) {}
 
   searchTag() {
-    const newTag = this.tagInput.nativeElement.value
+    const newTag = this.tagInput.nativeElement.value;
     this.gifsService.searchTag(newTag);
     this.tagInput.nativeElement.value = '';
   }
