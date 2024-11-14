@@ -13,7 +13,10 @@ export class GifsService {
 
   private _tagsHistory: string[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadLocalStorage();
+    console.log('Gifs Service Ready');
+  }
 
   get tagHistory() {
     return [...this._tagsHistory]; // crea una copia de _tagsHistory
@@ -28,6 +31,20 @@ export class GifsService {
 
     this._tagsHistory.unshift(tag);
     this._tagsHistory = this._tagsHistory.splice(0, 10);
+
+    this.saveLocalStorage();
+  }
+
+  private saveLocalStorage(): void {
+    localStorage.setItem('history', JSON.stringify(this._tagsHistory))
+  }
+
+  private loadLocalStorage(): void {
+    if (!localStorage.getItem('history')) return;
+    this._tagsHistory = JSON.parse(localStorage.getItem('history')!);
+    
+    if (this._tagsHistory.length ===0) return;
+    this.searchTag(this._tagsHistory[0]);
   }
 
   searchTag(tag: string): void {
@@ -44,9 +61,5 @@ export class GifsService {
     ).subscribe(resp => {
       this.gifList = resp.data
     })
-
-    /* fetch('https://api.giphy.com/v1/gifs/search?api_key=2TW70K0AwMBZ1o6WwNU3p53v9DR0J9xl&q=mario bros&limit=10')
-      .then(res => res.json())
-      .then(data => console.log(data)); */
   }
 }

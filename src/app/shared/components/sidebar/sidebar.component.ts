@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { GifsService } from '../../../gifs/gifs.service';
 
 @Component({
